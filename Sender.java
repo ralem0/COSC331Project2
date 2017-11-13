@@ -12,7 +12,7 @@ import java.net.SocketAddress;
 import java.util.Scanner;
 
 /**
- * @author Antoinette Addo
+ * @author Robel Alem & Quinn Conroy
  * @version 2017.10.12
  */
 

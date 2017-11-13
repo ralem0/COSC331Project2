@@ -11,7 +11,7 @@ import java.net.DatagramSocket;
 
 /**
  *
- * @author Antoinette Addo
+ * @author Robel Alem & Quinn Conroy
  * @version 2017.10.12
  */
 
