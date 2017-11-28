@@ -15,21 +15,75 @@ import java.io.*;
  */
 public class Server {
 
-	public final static String FILE_TO_SEND = "C"..\\Desktop\\files";
+	//public final static String FILE_TO_SEND = "C"..\\Desktop\\files";
 
 
 	public static void main(String[] args) {
-		FileInputStream fis = null;
+		String file;
+		System.out.println("File name : ");
+		Scanner scan = new Scanner (System.in);
+		file = scan.nextLine();
+		scan.close();
+
+		while(true){
+			int port = 5000;
+			ServerSocket newSocket = new ServerSocket(port);
+					System.out.println("Processing : ");
+			Socket clientSocket = newSocket.accept(); //accepts connection
+			System.out.println("Connect with" + clientSocket.getInetAddress().toString());
+			DataInputStream quinn = new DataInputStream(clientSocket.getInputStream());
+			DataOutputStream roe = new DataOutputStream(clientSocket.getOutputStream());
+
+			try {
+				String f = " ";
+				f = quinn.readUTF();
+				System.out.println("File sent: ");
+				if(!f.equals("stop")){
+					System.out.println("Sending files" + file);
+					roe.writeUTF(file);
+					roe.flush();
+
+					File ff = new File(file);
+					FileInputStream fis = new FileInputStream(ff);
+					long sz = (int) ff.length();
+					byte mybytearray [] = new byte [1024];
+					int run;
+					roe.writeUTF(Long.toString(sz));
+					roe.flush();
+					System.out.println("size :" + sz);
+					System.out.println("Buff size :" + newSocket.getReceiveBufferSize());
+					while((run = fis.read(mybytearray)) != -1){
+						roe.write(mybytearray, 0 , run);
+						roe.flush();
+					}
+					fis.close();
+					System.out.println("Ready :");
+					roe.flush();
+				}
+					roe.writeUTF("Done");
+					System.out.println("Finished");
+					roe.flush();
+
+				} catch (Exception e) {
+				e.printStackTrace();
+				System.out.print("Error");
+			}
+			quinn.close();
+			clientSocket.close();
+			newSocket.close();
+			}
+		}
+
 		BufferedInputStream bis = null;
 		OutputStream os = null;
 		ServerSocket servsock = null;
 		Socket sock = null;
 		try {
-			int port = 63342;
-			ServerSocket newSocket = new ServerSocket(port); //create new socket
+			//int port = 63342;
+			 //create new socket
 			System.out.println("server.");
 			while (true) {
-				Socket clientSocket = newSocket.accept(); //accepts connection
+				//Socket clientSocket = newSocket.accept();
 				Connection c = new Connection(clientSocket);
 				File myFile = new File(FILE_TO_SEND); //create new file object
 				byte[] mybytearray = new byte[(int) myFile.length()]; //converts file into bytes
